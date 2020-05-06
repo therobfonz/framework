@@ -57,12 +57,16 @@ class SeedCommand extends Command
             return 1;
         }
 
+        $times = $this->input->getOption('times') ?: 1;
+
         $previousConnection = $this->resolver->getDefaultConnection();
 
         $this->resolver->setDefaultConnection($this->getDatabase());
 
-        Model::unguarded(function () {
-            $this->getSeeder()->__invoke();
+        Model::unguarded(function () use ($times) {
+            for ($i = 1; $i <= $times; $i++) {
+                $this->getSeeder()->__invoke();
+            }
         });
 
         if ($previousConnection) {
@@ -111,6 +115,8 @@ class SeedCommand extends Command
             ['database', null, InputOption::VALUE_OPTIONAL, 'The database connection to seed'],
 
             ['force', null, InputOption::VALUE_NONE, 'Force the operation to run when in production'],
+
+            ['times', null, InputOption::VALUE_OPTIONAL, 'How many times to run the seeder'],
         ];
     }
 }

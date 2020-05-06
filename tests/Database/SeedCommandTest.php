@@ -16,13 +16,13 @@ class SeedCommandTest extends TestCase
 {
     public function testHandle()
     {
-        $input = new ArrayInput(['--force' => true, '--database' => 'sqlite']);
+        $input = new ArrayInput(['--force' => true, '--database' => 'sqlite', '--times' => 2]);
         $output = new NullOutput;
 
         $seeder = m::mock(Seeder::class);
-        $seeder->shouldReceive('setContainer')->once()->andReturnSelf();
-        $seeder->shouldReceive('setCommand')->once()->andReturnSelf();
-        $seeder->shouldReceive('__invoke')->once();
+        $seeder->shouldReceive('setContainer')->times(2)->andReturnSelf();
+        $seeder->shouldReceive('setCommand')->times(2)->andReturnSelf();
+        $seeder->shouldReceive('__invoke')->times(2);
 
         $resolver = m::mock(ConnectionResolverInterface::class);
         $resolver->shouldReceive('getDefaultConnection')->once();
